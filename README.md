@@ -1,6 +1,6 @@
-# Toggle Device Script
+# Toggle
 
-This is a Windows batch script that toggles the status of specific input devices (Pen, Touch Screen, and Touch Pad) using the DevCon command-line utility.
+This is a little Windows batch script that toggles the status of specific input devices (Pen, Touch Screen, and Touch Pad in my case) using the DevCon command-line utility.
 
 ## Features
 
