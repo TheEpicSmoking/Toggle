@@ -30,17 +30,6 @@ You can modify these device IDs in the script to manage other devices as needed.
 
 ### Main Menu
 
-- **1**: Toggle Pen
-- **2**: Toggle Touch Screen
-- **3**: Toggle Touch Pad
-- **e**: Enable all devices
-- **d**: Disable all devices
-- **h**: Display help
-- **r**: Refresh status
-- **q**: Quit
-
-### Help Menu
-
 - `0-9`: Toggle specific device.
 - `e`: Enable all devices.
 - `d`: Disable all devices.
