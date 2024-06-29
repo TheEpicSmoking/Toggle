@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 cd /d "%~dp0"
-set config = "config.ini"
+set "config=config.ini"
 :: Window conf
 title "Toggle"
 mode con: cols=35 lines=7
@@ -16,7 +16,8 @@ set "RED=%ESC%[31m"
 set "YELLOW=%ESC%[33m"
 
 :: Read devices from config.ini
-for /f "tokens=1,2 delims=, "%%A in ('findstr /R "^device[0-9]*=" config.ini') do (
+set "count=0"
+for /f "tokens=1,2 delims== " %%A in ('findstr /R "^device[0-9]*=" %config%') do (
     set /a count+=1
     set "device[!count!].name=%%A"
     set "device[!count!].id=%%B"
