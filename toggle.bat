@@ -1,6 +1,8 @@
 @echo off
-setlocal
+setlocal enabledelayedexpansion
 
+cd /d "%~dp0"
+set config = "config.ini"
 :: Window conf
 title "Toggle"
 mode con: cols=35 lines=7
@@ -14,14 +16,19 @@ set "RED=%ESC%[31m"
 set "YELLOW=%ESC%[33m"
 
 :: Read devices from config.ini
-for /f "tokens=1,2 delims==" %%A in ('findstr /r /c:"^device[0-9]*=" config.ini') do (
-    set "%%A=%%B"
+for /f "tokens=1,2 delims=, "%%A in ('findstr /R "^device[0-9]*=" config.ini') do (
+    set /a count+=1
+    set "device[!count!].name=%%A"
+    set "device[!count!].id=%%B"
 )
+echo "%device[1].name%"
+echo "%device[1].id%"
+pause
 
 :beginning
 
 :: Verify Devices status
-for /f "tokens=1,2 delims=," %%A in ('findstr /r /c:"^device[0-9]*=" config.ini') do (
+for /f "tokens=1,2 delims=," %%A in ('findstr /R  /C:"^device[0-9]*=" /G:config.ini') do (
     set "%%A_enabled=false"
     for /f "tokens=2 delims=," %%B in ("%%B") do (
         devcon status %%B | findstr "running." > nul
@@ -35,7 +42,7 @@ for /f "tokens=1,2 delims=," %%A in ('findstr /r /c:"^device[0-9]*=" config.ini'
 call :StatusViewer
 set /p choice=">  "
 
-for /f "tokens=1,2 delims=," %%A in ('findstr /r /c:"^device[0-9]*=" config.ini') do (
+for /f "tokens=1,2 delims=," %%A in ('findstr /R  /C:"^device[0-9]*=" /G:config.ini'') do (
     if "%choice%" == "%%A" (
         if "%%A_enabled" == "false" (
             for /f "tokens=2 delims=," %%B in ("%%B") do (
@@ -85,7 +92,7 @@ if "%choice%" == "e" (
 )
 
 :enableAllDevices
-for /f "tokens=1,2 delims=," %%A in ('findstr /r /c:"^device[0-9]*=" config.ini') do (
+for /f "tokens=1,2 delims=," %%A in ('findstr /R  /C:"^device[0-9]*=" /G:config.ini') do (
     for /f "tokens=2 delims=," %%B in ("%%B") do (
         devcon enable %%B >nul
     )
@@ -93,7 +100,7 @@ for /f "tokens=1,2 delims=," %%A in ('findstr /r /c:"^device[0-9]*=" config.ini'
 goto :beginning
 
 :disableAllDevices
-for /f "tokens=1,2 delims=," %%A in ('findstr /r /c:"^device[0-9]*=" config.ini') do (
+for /f "tokens=1,2 delims=," %%A in ('findstr /R  /C:"^device[0-9]*=" /G:config.ini') do (
     for /f "tokens=2 delims=," %%B in ("%%B") do (
         devcon disable %%B >nul
     )
@@ -102,8 +109,9 @@ goto :beginning
 
 :StatusViewer
 cls
+echo %cd%
 echo --------- DEVICES  STATUS ---------
-for /f "tokens=1,2 delims=," %%A in ('findstr /r /c:"^device[0-9]*=" config.ini') do (
+for /f "tokens=1,2 delims=," %%A in ('findstr /R  /C:"^device[0-9]*=" /G:config.ini') do (
     if "%%A_enabled" == "true" (
         echo %%A. %%B: %GREEN%Enabled%RESET%
     ) else (
