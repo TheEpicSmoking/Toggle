@@ -13,57 +13,44 @@ set "RESET=%ESC%[0m"
 set "RED=%ESC%[31m"
 set "YELLOW=%ESC%[33m"
 
-:: ID devices
-set "touch_screen=@HID\WACF2200&COL01\4&34C53&1&0000"
-set "pen=@HID\WACF2200&COL05\4&34C53&1&0004"
-set "touch_pad=@HID\SYNAC780&COL02\4&3B228C5&1&0001"
+:: Read devices from config.ini
+for /f "tokens=1,2 delims==" %%A in ('findstr /r /c:"^device[0-9]*=" config.ini') do (
+    set "%%A=%%B"
+)
 
 :beginning
 
 :: Verify Devices status
-set "ts_enabled=false"
-set "pen_enabled=false"
-set "tp_enabled=false"
-
-devcon status "%touch_screen%" | findstr "running." > nul
-if %errorlevel% equ 0 (
-    set "ts_enabled=true"
-)
-devcon status "%touch_pad%" | findstr "running." > nul
-if %errorlevel% equ 0 (
-    set "tp_enabled=true"
-)
-devcon status "%pen%" | findstr "running." > nul
-if %errorlevel% equ 0 (
-    set "pen_enabled=true"
+for /f "tokens=1,2 delims=," %%A in ('findstr /r /c:"^device[0-9]*=" config.ini') do (
+    set "%%A_enabled=false"
+    for /f "tokens=2 delims=," %%B in ("%%B") do (
+        devcon status %%B | findstr "running." > nul
+        if %errorlevel% equ 0 (
+            set "%%A_enabled=true"
+        )
+    )
 )
 
 :: Main menu
 call :StatusViewer
 set /p choice=">  "
 
-if "%choice%" == "1" (
-    if "%pen_enabled%" == "false" (
-    devcon enable "%pen%" >nul
-    ) else (
-        devcon disable "%pen%" >nul
+for /f "tokens=1,2 delims=," %%A in ('findstr /r /c:"^device[0-9]*=" config.ini') do (
+    if "%choice%" == "%%A" (
+        if "%%A_enabled" == "false" (
+            for /f "tokens=2 delims=," %%B in ("%%B") do (
+                devcon enable %%B >nul
+            )
+        ) else (
+            for /f "tokens=2 delims=," %%B in ("%%B") do (
+                devcon disable %%B >nul
+            )
+        )
+        goto :beginning
     )
-    goto :beginning
-) else if "%choice%" == "2" (
-    if "%ts_enabled%" == "false" (
-    devcon enable "%touch_screen%" >nul
-    ) else (
-        devcon disable "%touch_screen%" >nul
-    )
-    goto :beginning
-) else if "%choice%" == "3" (
-    if "%tp_enabled%" == "false" (
-        devcon enable "%touch_pad%" >nul
-    ) else (
-        devcon disable "%touch_pad%" >nul
-    )
-    goto :beginning
-) else if "%choice%" == "e" (
+)
+
+if "%choice%" == "e" (
     call :enableAllDevices
 ) else if "%choice%" == "d" (
     call :disableAllDevices
@@ -97,37 +84,31 @@ if "%choice%" == "1" (
     goto :beginning
 )
 
-
 :enableAllDevices
-devcon enable "%pen%" >nul
-devcon enable "%touch_screen%" >nul
-devcon enable "%touch_pad%" >nul
+for /f "tokens=1,2 delims=," %%A in ('findstr /r /c:"^device[0-9]*=" config.ini') do (
+    for /f "tokens=2 delims=," %%B in ("%%B") do (
+        devcon enable %%B >nul
+    )
+)
 goto :beginning
 
 :disableAllDevices
-devcon disable "%pen%" >nul
-devcon disable "%touch_screen%" >nul
-devcon disable "%touch_pad%" >nul
+for /f "tokens=1,2 delims=," %%A in ('findstr /r /c:"^device[0-9]*=" config.ini') do (
+    for /f "tokens=2 delims=," %%B in ("%%B") do (
+        devcon disable %%B >nul
+    )
+)
 goto :beginning
-
 
 :StatusViewer
 cls
 echo --------- DEVICES  STATUS ---------
-if "%pen_enabled%" == "true" (
-    echo 1. Pen: %GREEN%Enabled%RESET%
-) else (
-    echo 1. Pen: %RED%Disabled%RESET%
-)
-if "%ts_enabled%" == "true" (
-    echo 2. Touch Screen: %GREEN%Enabled%RESET%
-) else (
-    echo 2. Touch Screen: %RED%Disabled%RESET%
-)
-if "%tp_enabled%" == "true" (
-    echo 3. Touch Pad: %GREEN%Enabled%RESET%
-) else (
-    echo 3. Touch Pad: %RED%Disabled%RESET%
+for /f "tokens=1,2 delims=," %%A in ('findstr /r /c:"^device[0-9]*=" config.ini') do (
+    if "%%A_enabled" == "true" (
+        echo %%A. %%B: %GREEN%Enabled%RESET%
+    ) else (
+        echo %%A. %%B: %RED%Disabled%RESET%
+    )
 )
 echo -----------------------------------
 goto :eof
