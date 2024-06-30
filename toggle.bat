@@ -16,7 +16,6 @@ set "YELLOW=%ESC%[33m"
 
 :: Read devices from config.ini into an array
 set "inDevicesSection=false"
-set "count=0"
 set "DeviceCount=0"
 for /f "tokens=1,2 delims==" %%A in (%config%) do (
     if "%%A"=="[devices]" (
@@ -26,14 +25,13 @@ for /f "tokens=1,2 delims==" %%A in (%config%) do (
             set "inDevicesSection=false"
         )
     )
-    if "!inDevicesSection!"=="true" if not "!count!"=="0" (
+    if "!inDevicesSection!"=="true" if not "%%A"=="[devices]" (
+        set /a DeviceCount+=1
         set "deviceName=%%A"
         if "!deviceName:~30!" neq "" set "deviceName=!deviceName:~0,30!"
-        set "device[!count!].name=!deviceName!"
-        set "device[!count!].id=@%%B"
-        set /a DeviceCount+=1
+        set "device[!DeviceCount!].name=!deviceName!"
+        set "device[!DeviceCount!].id=@%%B"
     )
-    set /a count+=1
 )
 
 :: Window conf
