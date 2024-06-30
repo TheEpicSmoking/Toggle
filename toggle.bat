@@ -16,14 +16,24 @@ set "RED=%ESC%[31m"
 set "YELLOW=%ESC%[33m"
 
 :: Read devices from config.ini
+set "inDevicesSection=false"
 set "count=0"
-for /f "tokens=1,2 delims== " %%A in ('findstr /R "^device[0-9]*=" %config%') do (
+for /f "tokens=1,2 delims== " %%A in (%config%) do (
+    if "%%A"=="[devices]" (
+        set "inDevicesSection=true"
+    ) else ( echo %%A | find "[" >nul
+            if !errorlevel! equ 0 (
+            set "inDevicesSection=false"
+        )
+    )
+    if "!inDevicesSection!"=="true" if not "!count!"=="0" (
+        set "device[!count!].name=%%A"
+        set "device[!count!].id=%%B"
+    )
     set /a count+=1
-    set "device[!count!].name=%%A"
-    set "device[!count!].id=%%B"
 )
+echo "%device[3].name%"
 echo "%device[1].name%"
-echo "%device[1].id%"
 pause
 
 :beginning
