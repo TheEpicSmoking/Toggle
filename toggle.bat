@@ -4,10 +4,7 @@ setlocal enabledelayedexpansion
 :: Set wd for confing.ini
 cd /d "%~dp0"
 set "config=config.ini"
-
-:: Window conf
-title "Toggle"
-::mode con: cols=35 lines=7
+mode con: cols=44 lines=7
 
 :: ANSI Escape Sequence
 set "ESC="
@@ -30,12 +27,20 @@ for /f "tokens=1,2 delims==" %%A in (%config%) do (
         )
     )
     if "!inDevicesSection!"=="true" if not "!count!"=="0" (
-        set "device[!count!].name=%%A"
+        set "deviceName=%%A"
+        if "!deviceName:~30!" neq "" set "deviceName=!deviceName:~0,30!"
+        set "device[!count!].name=!deviceName!"
         set "device[!count!].id=@%%B"
         set /a DeviceCount+=1
     )
     set /a count+=1
 )
+
+:: Window conf
+title "Toggle"
+set /a "num_lines=DeviceCount + 4"
+if  %num_lines% leq 6 (set /a "num_lines=7")
+mode con: cols=44 lines=%num_lines%
 
 :beginning
 
@@ -108,7 +113,7 @@ goto :beginning
 
 :StatusViewer
 cls
-echo --------- DEVICES  STATUS ---------
+echo -------------- DEVICES STATUS --------------
 for /L %%i in (1,1,!DeviceCount!) do (
     if "!device[%%i].enabled!" == "true" (
         echo %%i. !device[%%i].name!: %GREEN%Enabled%RESET%
@@ -116,5 +121,5 @@ for /L %%i in (1,1,!DeviceCount!) do (
         echo %%i. !device[%%i].name!: %RED%Disabled%RESET%
     )
 )
-echo -----------------------------------
+echo --------------------------------------------
 goto :eof
