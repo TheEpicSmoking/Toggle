@@ -118,15 +118,15 @@ goto :menu
 
 :helper
     cls
-    echo|set /p="0-9  %YELLOW%|%RESET% Toggle Device."
+    echo|set /p="[0-9]* %YELLOW%|%RESET% Toggle Device."
     echo:
-    echo|set /p=" e    %YELLOW%|%RESET% Enable all Devices."
+    echo|set /p="e      %YELLOW%|%RESET% Enable all Devices."
     echo:
-    echo|set /p=" d    %YELLOW%|%RESET% Disable all Devices."
+    echo|set /p="d      %YELLOW%|%RESET% Disable all Devices."
     echo:
-    echo|set /p=" r    %YELLOW%|%RESET% Refresh."
+    echo|set /p="r      %YELLOW%|%RESET% Refresh."
     echo:
-    echo|set /p=" q    %YELLOW%|%RESET% Quit."
+    echo|set /p="q      %YELLOW%|%RESET% Quit."
     echo:
     echo:
     echo|set /p="Press a button to return... "
