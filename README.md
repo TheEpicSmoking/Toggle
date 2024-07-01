@@ -1,58 +1,85 @@
-# Toggle
+# WinDev Switch
 
-This is a little Windows batch script that toggles the status of specific input devices (Pen, Touch Screen, and Touch Pad in my case) using the DevCon command-line utility.
+## Overview
+
+WinDev Switch is a batch script designed to manage device states (enabled/disabled) on a Windows machine using `devcon`. This script reads configurations from a `config.ini` file and provides an interactive menu for toggling device states.
 
 ## Features
 
-- Enable or disable individual devices.
-- Enable all devices at once.
-- Disable all devices at once.
-- Refresh device status.
-- View help instructions.
+- Displays a quick interactive menu for enabling/disabling devices.
+- Allows enabling/disabling all devices at once.
+- Configurable console window size.
+
+##Usage
+
+Place the script and `config.ini` in the same directory.
+Run the script by double-clicking it or executing it in the command line:
+```
+cmd
+path\to\script\WinDevSwitch.bat
+```
+
+## Menu Options
+
+- [0-9]*: Toggle the state of the corresponding device.
+- e: Enable all devices.
+- d: Disable all devices.
+- r: Refresh the device list and reread config.ini to reflect any changes.
+- h: Show help.
+- q: Quit the script.
 
 ## Prerequisites
 
-- **DevCon Utility**: This script requires the DevCon command-line utility to manage device states. You can download DevCon from the Microsoft website.
+- `devcon` must be installed and accessible via the command line.
+- `config.ini` must be present in the same directory as the script, with sections for `[settings]` and `[devices]`.
 
-## Devices
+## Installing devcon
 
-The script is configured to manage the following devices:
-- **Pen**: `@HID\WACF2200&COL05\4&34C53&1&0004`
-- **Touch Screen**: `@HID\WACF2200&COL01\4&34C53&1&0000`
-- **Touch Pad**: `@HID\SYNAC780&COL02\4&3B228C5&1&0001`
+1. Download `devcon` from the Microsoft website or another trusted source.
+2. Extract the `devcon` executable to a known directory, for example `C:\devcon`.
+3. Add the directory to your system's PATH:
+   - Open the Start Menu, type "Environment Variables," and select "Edit the system environment variables."
+   - Click on "Environment Variables" in the System Properties window.
+   - In the Environment Variables window, find and select the "Path" variable under System variables, and click "Edit."
+   - Click "New" and add the path to the directory where `devcon` is located (e.g., `C:\devcon`).
+   - Click "OK" to close all windows.
 
-You can modify these device IDs in the script to manage other devices as needed.
+## Retrieving Device IDs
 
-## Usage
+1. Open a Command Prompt with administrator privileges.
+2. List all devices and their IDs using `devcon`:
+   ```cmd
+   devcon find *
+   ```
+3. Identify the devices you want to manage and note their IDs (e.g., `PCI\VEN_10EC&DEV_8136&SUBSYS_813610EC`).
+4. Add these device names and IDs to the `[devices]` section of your `config.ini` file. Note that the device names can be whatever you want, but they must not contain equals (`=`).
 
-1. **Download DevCon Utility** and place it in the same directory as the script or add it to your system's PATH.
-2. **Run the script** by double-clicking `ToggleDevices.bat` or running it from the command line.
+```config.ini (Example)
+[settings]
+frame=true
+colors=true
+columns=45
+lines=7
+adaptive_height=true
 
-### Main Menu
+[devices]
+WiFi=PCI\VEN_10EC&DEV_8176&SUBSYS_817610EC
+Bluetooth=USB\VID_0A12&PID_0001
+Ethernet=PCI\VEN_10EC&DEV_8136&SUBSYS_813610E
+```
 
-- `0-9`: Toggle specific device.
-- `e`: Enable all devices.
-- `d`: Disable all devices.
-- `r`: Refresh status.
-- `q`: Quit.
+##Settings
 
-## Code Explanation
+`frame`: Decides if the menu has a frame around it.
+`colors`: Enables or disables colored output (green for enabled, red for disabled).
+`columns`: Sets the console window width.
+`lines`: Sets the console window height (only works if `adaptive_height` is `false`).
+`adaptive_height`: Dynamically changes the console window height based on the number of devices.
 
-The script performs the following steps:
+##Notes
+- Ensure devcon is properly installed and the device IDs in config.ini are correct.
+- Running the script may require administrator privileges for enabling/disabling devices.
+- An icon is provided if you want to use it!
+- This project is licensed under the GPL License.
 
-1. **Set up window configuration**: Sets the window title and size.
-2. **Define ANSI escape sequences**: For colored text output.
-3. **Identify devices**: Sets the device IDs for Pen, Touch Screen, and Touch Pad.
-4. **Check device status**: Uses `devcon status` to determine if each device is running.
-5. **Display main menu**: Shows the status of each device and waits for user input.
-6. **Handle user input**: Based on the input, it enables/disables devices, shows help, refreshes status, or exits the script.
-
-## Notes
-
-- Ensure that DevCon is properly installed and accessible from the script.
-- Modify device IDs in the script if necessary to match your specific hardware.
-- Run the script with administrative privileges (`Run as Administrator`) for proper operation.
-
-## License
-
-This project is licensed under the MIT License.
+Enjoy managing your devices with WinDev Switch!
