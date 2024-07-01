@@ -10,7 +10,7 @@ WinDev Switch is a batch script designed to manage device states (enabled/disabl
 - Allows enabling/disabling all devices at once.
 - Configurable console window size.
 
-##Usage
+## Usage
 
 Place the script and `config.ini` in the same directory.
 Run the script by double-clicking it or executing it in the command line:
