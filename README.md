@@ -14,8 +14,7 @@ WinDev Switch is a batch script designed to manage device states (enabled/disabl
 
 Place the script and `config.ini` in the same directory.
 Run the script by double-clicking it or executing it in the command line:
-```
-cmd
+```cmd
 path\to\script\WinDevSwitch.bat
 ```
 
@@ -54,7 +53,8 @@ path\to\script\WinDevSwitch.bat
 3. Identify the devices you want to manage and note their IDs (e.g., `PCI\VEN_10EC&DEV_8136&SUBSYS_813610EC`).
 4. Add these device names and IDs to the `[devices]` section of your `config.ini` file. Note that the device names can be whatever you want, but they must not contain equals (`=`).
 
-```config.ini (Example)
+## config.ini (Example)
+```
 [settings]
 frame=true
 colors=true
@@ -68,15 +68,15 @@ Bluetooth=USB\VID_0A12&PID_0001
 Ethernet=PCI\VEN_10EC&DEV_8136&SUBSYS_813610E
 ```
 
-##Settings
+## Settings
 
-`frame`: Decides if the menu has a frame around it.
-`colors`: Enables or disables colored output (green for enabled, red for disabled).
-`columns`: Sets the console window width.
-`lines`: Sets the console window height (only works if `adaptive_height` is `false`).
-`adaptive_height`: Dynamically changes the console window height based on the number of devices.
+- `frame`: Decides if the menu has a frame around it.
+- `colors`: Enables or disables colored output (green for enabled, red for disabled).
+- `columns`: Sets the console window width.
+- `lines`: Sets the console window height (only works if `adaptive_height` is `false`).
+- `adaptive_height`: Dynamically changes the console window height based on the number of devices.
 
-##Notes
+## Notes
 - Ensure devcon is properly installed and the device IDs in config.ini are correct.
 - Running the script may require administrator privileges for enabling/disabling devices.
 - An icon is provided if you want to use it!
