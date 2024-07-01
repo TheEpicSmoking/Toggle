@@ -1,7 +1,4 @@
 # WinDev Switch
-
-## Overview
-
 WinDev Switch is a batch script designed to manage device states (enabled/disabled) on a Windows machine using `devcon`. This script reads configurations from a `config.ini` file and provides an interactive menu for toggling device states.
 
 ## Features
@@ -9,23 +6,6 @@ WinDev Switch is a batch script designed to manage device states (enabled/disabl
 - Displays a quick interactive menu for enabling/disabling devices.
 - Allows enabling/disabling all devices at once.
 - Configurable console window size.
-
-## Usage
-
-Place the script and `config.ini` in the same directory.
-Run the script by double-clicking it or executing it in the command line:
-```cmd
-path\to\script\WinDevSwitch.bat
-```
-
-## Menu Options
-
-- [0-9]*: Toggle the state of the corresponding device.
-- e: Enable all devices.
-- d: Disable all devices.
-- r: Refresh the device list and reread config.ini to reflect any changes.
-- h: Show help.
-- q: Quit the script.
 
 ## Prerequisites
 
@@ -52,6 +32,7 @@ path\to\script\WinDevSwitch.bat
    ```
 3. Identify the devices you want to manage and note their IDs (e.g., `PCI\VEN_10EC&DEV_8136&SUBSYS_813610EC`).
 4. Add these device names and IDs to the `[devices]` section of your `config.ini` file. Note that the device names can be whatever you want, but they must not contain equals (`=`).
+
 ## Settings
 
 - frame: Decides if the menu has a frame around it.
@@ -60,6 +41,7 @@ path\to\script\WinDevSwitch.bat
 - lines: Sets the console window height (only works if `adaptive_height` is `false`).
 - adaptive_height: Dynamically changes the console window height based on the number of devices.
 ## config.ini (Example)
+
 ```
 [settings]
 frame=true
@@ -73,6 +55,23 @@ WiFi=PCI\VEN_10EC&DEV_8176&SUBSYS_817610EC
 Bluetooth=USB\VID_0A12&PID_0001
 Ethernet=PCI\VEN_10EC&DEV_8136&SUBSYS_813610E
 ```
+
+## Usage
+
+Place the script and `config.ini` in the same directory.
+Run the script by double-clicking it or executing it in the command line:
+```cmd
+path\to\script\WinDevSwitch.bat
+```
+
+## Menu Options
+
+- [0-9]*: Toggle the state of the corresponding device.
+- e: Enable all devices.
+- d: Disable all devices.
+- r: Refresh the device list and reread config.ini to reflect any changes.
+- h: Show help.
+- q: Quit the script.
 
 ## Notes
 - Ensure devcon is properly installed and the device IDs in config.ini are correct.
