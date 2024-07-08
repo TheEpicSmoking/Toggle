@@ -77,6 +77,6 @@ path\to\script\WinDevSwitch.bat
 - Ensure devcon is properly installed and the device IDs in config.ini are correct.
 - Running the script may require administrator privileges for enabling/disabling devices.
 - An icon is provided if you want to use it!
-- This project is licensed under the GPL License.
+- This project is licensed under the MIT License.
 
 Enjoy managing your devices with WinDev Switch!
